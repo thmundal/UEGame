@@ -4,33 +4,51 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include <Runtime/Engine/Classes/Engine/DataTable.h>
 
-#include "InputMappingContext.h"
-#include "MyCharacter.generated.h"
+#include "FirstUE5/Systems/Interaction/InteractionComponent.h"
+#include "GamePlayerCharacter.generated.h"
 
+class UHUDManager;
 class UEnhancedInputLocalPlayerSubsystem;
 class UInputAction;
+class UEnhancedInputComponent;
+class UInputMappingContext;
+class UDataTable;
+struct FInputActionValue;
+
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnPlayerInputComponentSetupDelegate, UEnhancedInputLocalPlayerSubsystem*, UEnhancedInputComponent*);
+// DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerInputComponentSetupDelegate, UEnhancedInputLocalPlayerSubsystem*, A, UEnhancedInputComponent*, B);
+
 
 UCLASS()
-class FIRSTUE5_API AMyCharacter : public ACharacter
+class FIRSTUE5_API AGamePlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 private:
+	UPROPERTY(EditAnywhere, Category="Interaction")
+	UInteractionComponent* m_InteractionComponent;
+	
+	UPROPERTY(Transient)
 	UEnhancedInputComponent* m_InputComponent;
 	
-private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TSoftObjectPtr<UDataTable> m_InputActions;
 
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputMappingContext* m_InputContext;
+
+	UPROPERTY(EditDefaultsOnly)
+	UHUDManager* m_HudManager;
+	
+	FOnPlayerInputComponentSetupDelegate m_OnPlayerInputComponentSetup;
 	
 public:
 	// Sets default values for this character's properties
-	AMyCharacter();
+	AGamePlayerCharacter();
 
+	FOnPlayerInputComponentSetupDelegate& OnPlayerInputComponentSetup() { return m_OnPlayerInputComponentSetup; }
+	UEnhancedInputComponent* GetInputComponent() const { return m_InputComponent; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -45,8 +63,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void MoveForwardInputFunction(const FInputActionValue& ActionValue);
-
 	void MouseLookInputFunction(const FInputActionValue& ActionValue);
+
+	// Getters
+	UHUDManager* GetHudManager() const { return m_HudManager; }
 
 	TMap<FName, FText> InputMap;
 };

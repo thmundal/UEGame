@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.0",
+	"EngineAssociation": "5.1",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -32,6 +32,26 @@
 		},
 		{
 			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "ActorSequence",
+			"Enabled": true
+		},
+		{
+			"Name": "RigLogic",
+			"Enabled": true
+		},
+		{
+			"Name": "LiveLink",
+			"Enabled": true
+		},
+		{
+			"Name": "LiveLinkControlRig",
+			"Enabled": true
+		},
+		{
+			"Name": "HairStrands",
 			"Enabled": true
 		}
 	]

@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
-#include "MyGameMode.generated.h"
+#include "ASpaceRepairGameMode.generated.h"
 
 class UPowerCircuitComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPowerCircuitAddedDelegate, UPowerCircuitComponent*, PowerCircuit);
 
 UCLASS()
-class FIRSTUE5_API AMyGameMode : public AGameMode
+class FIRSTUE5_API ASpaceRepairGameMode : public AGameMode
 {
 	GENERATED_BODY()
 

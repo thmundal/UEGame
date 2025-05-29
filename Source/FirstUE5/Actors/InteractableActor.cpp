@@ -1,10 +1,9 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿// Copyright 2025 Chaos games
 
 #include "InteractableActor.h"
 
 #include "OpenableDoor.h"
-
+#include "FirstUE5/Systems/Interaction/TriggerReceiverInterface.h"
 
 // Sets default values
 AInteractableActor::AInteractableActor()
@@ -14,29 +13,25 @@ AInteractableActor::AInteractableActor()
 	SetReplicates(true);
 }
 
-// Called when the game starts or when spawned
-void AInteractableActor::BeginPlay()
+void AInteractableActor::OnInteract(AActor* InteractingActor)
 {
-	Super::BeginPlay();
-	
+	BP_OnInteract(InteractingActor);
+}
+
+void AInteractableActor::BP_OnInteract_Implementation(AActor* InteractingActor)
+{
+	ExecuteTriggerReceiver();
+}
+
+void AInteractableActor::ExecuteTriggerReceiver(UObject* TriggerPayload)
+{
+	if (m_TriggerReceiver && m_TriggerReceiver->Implements<UTriggerReceiverInterface>())
+	{
+		ITriggerReceiverInterface::Execute_OnTriggerReceived(m_TriggerReceiver, TriggerPayload);
+	}
 }
 
 void AInteractableActor::ServerInteract_Implementation(AActor* InteractingActor)
 {
 	OnInteract(InteractingActor);
 }
-
-void AInteractableActor::OnInteract(AActor* InteractingActor)
-{
-	AOpenableDoor* Door = Cast<AOpenableDoor>(m_Door);
-	if (IsValid(Door))
-	{
-		Door->ServerToggleState();		
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No valid door set"));
-	}
-	UE_LOG(LogTemp, Warning, TEXT("It was interacted with!"));
-}
-

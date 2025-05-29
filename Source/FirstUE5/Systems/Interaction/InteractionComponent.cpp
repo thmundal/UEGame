@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright 2025 Chaos games
 
 
 #include "InteractionComponent.h"
@@ -11,6 +11,7 @@
 #include "FirstUE5/DataTables/DataTableSettings.h"
 #include "FirstUE5/GUI/HUDManager.h"
 #include "FirstUE5/GUI/PlayerHudWidget.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values for this component's properties
@@ -19,8 +20,6 @@ UInteractionComponent::UInteractionComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 
@@ -45,15 +44,20 @@ void UInteractionComponent::OnTriggerOverlapEnd(UPrimitiveComponent* OverlappedC
 
 void UInteractionComponent::ExecuteInteraction()
 {
-	ServerExecuteInteraction();
-}
-
-void UInteractionComponent::ServerExecuteInteraction_Implementation() const
-{
+	if (!UKismetSystemLibrary::IsServer(this))
+	{
+		ServerExecuteInteraction();
+	}
+	
 	if (m_CurrentInteractionTarget != nullptr)
 	{
 		m_CurrentInteractionTarget->OnInteract(GetOwner());
 	}
+}
+
+void UInteractionComponent::ServerExecuteInteraction_Implementation()
+{
+	ExecuteInteraction();
 }
 
 void UInteractionComponent::BindInputActions(UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem,
@@ -86,10 +90,14 @@ void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
 	OnComponentBeginOverlap.AddDynamic(this, &UInteractionComponent::OnTriggerOverlapStart);
 	OnComponentEndOverlap.AddDynamic(this, &UInteractionComponent::OnTriggerOverlapEnd);
 	SetSphereRadius(m_InteractionDetectionRadius);
+}
+
+void UInteractionComponent::OnRegister()
+{
+	Super::OnRegister();
 
 	AGamePlayerCharacter* const PlayerCharacter = Cast<AGamePlayerCharacter>(GetOwner());
 	if (IsValid(PlayerCharacter))

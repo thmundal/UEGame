@@ -1,13 +1,13 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright 2025 Chaos games
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "FirstUE5/Systems/Interaction/IInteractableInterface.h"
-#include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "InteractableActor.generated.h"
 
+class ITriggerReceiverInterface;
 class AOpenableDoor;
 UCLASS()
 class FIRSTUE5_API AInteractableActor : public AActor, public IInteractableInterface
@@ -17,14 +17,17 @@ class FIRSTUE5_API AInteractableActor : public AActor, public IInteractableInter
 public:
 	// Sets default values for this actor's properties
 	AInteractableActor();
+
 	virtual void OnInteract(AActor* InteractingActor) override;
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void BP_OnInteract(AActor* InteractingActor);
 
+	void ExecuteTriggerReceiver(UObject* TriggerPayload = nullptr);
+	
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<AOpenableDoor> m_Door;
+	UPROPERTY(EditAnywhere, meta = (MustImplement = "TriggerReceiverInterface"))
+	TObjectPtr<AActor> m_TriggerReceiver;
 	
 private:
 	UFUNCTION(Server, Reliable)

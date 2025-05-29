@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright 2025 Chaos games
 
 #pragma once
 
@@ -31,13 +31,16 @@ private:
 	void ExecuteInteraction();
 
 	UFUNCTION(Server, Reliable)
-	void ServerExecuteInteraction() const;
+	void ServerExecuteInteraction();
 	
 protected:
 	void BindInputActions(UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem, UEnhancedInputComponent* EnhancedInputComponent);
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+public:
+	virtual void OnRegister() override;
+	
 public:
 	UPROPERTY(EditAnywhere)
 	float m_InteractionDetectionRadius = 100.0f;

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2025 Chaos games
 
 #pragma once
 
@@ -42,6 +42,7 @@ private:
 	UHUDManager* m_HudManager;
 	
 	FOnPlayerInputComponentSetupDelegate m_OnPlayerInputComponentSetup;
+	bool m_bInputComponentInitialized = false;
 	
 public:
 	// Sets default values for this character's properties
@@ -49,6 +50,7 @@ public:
 
 	FOnPlayerInputComponentSetupDelegate& OnPlayerInputComponentSetup() { return m_OnPlayerInputComponentSetup; }
 	UEnhancedInputComponent* GetInputComponent() const { return m_InputComponent; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

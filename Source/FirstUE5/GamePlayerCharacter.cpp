@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2025 Chaos games
 
 
 #include "GamePlayerCharacter.h"
@@ -16,8 +16,6 @@
 #include "MyPlayerController.h"
 #include "GUI/HUDManager.h"
 
-PRAGMA_DISABLE_OPTIMIZATION
-
 // Sets default values
 AGamePlayerCharacter::AGamePlayerCharacter()
 {
@@ -33,8 +31,6 @@ AGamePlayerCharacter::AGamePlayerCharacter()
 void AGamePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	ENetMode NetMode = GetNetMode();
-
 	m_InteractionComponent = FindComponentByClass<UInteractionComponent>();
 }
 
@@ -96,6 +92,7 @@ void AGamePlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 					{
 						m_OnPlayerInputComponentSetup.Broadcast(Subsystem, PlayerEnhancedInputComponent);
 					}
+					m_bInputComponentInitialized = true;
 				}
 			}
 		}
@@ -116,5 +113,3 @@ void AGamePlayerCharacter::MouseLookInputFunction(const FInputActionValue& Actio
 	AddControllerPitchInput(-InputAxis.Y);
 	AddControllerYawInput(InputAxis.X);
 }
-
-PRAGMA_ENABLE_OPTIMIZATION

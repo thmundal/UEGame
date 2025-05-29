@@ -37,6 +37,16 @@ void UAttributeSetHolder::RemoveGameplayEffect(TSubclassOf<UGameplayEffect> Game
 	m_AbilitySystemComponent->RemoveActiveGameplayEffectBySourceEffect(GameplayEffectClass, Instigator);
 }
 
+float UAttributeSetHolder::GetAttributeValue(const FGameplayAttribute& Attribute) const
+{
+	if (IsValid(m_AbilitySystemComponent))
+	{
+		return m_AbilitySystemComponent->GetNumericAttribute(Attribute);
+	}
+
+	return 0.0f;
+}
+
 void UAttributeSetHolder::BindOnAttributeChanged(FGameplayAttribute Attribute)
 {
 	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
@@ -58,13 +68,17 @@ void UAttributeSetHolder::InitializeWithAbilitySystem()
 		return;
 	}
 
-	if (!IsValid(m_AttributeSetClass))
+	for (const TSubclassOf<UAttributeSet>& AttributeSetClass : m_AttributeSetClasses)
 	{
-		UE_LOG(LogAttributeSetHolder, Error, TEXT("InitializeWithAbilitySystem called on %s without a valid AttributeSetClass"), *GetName());
-		return;
+		if (IsValid(AttributeSetClass))
+		{
+			m_AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSet>(m_AbilitySystemComponent->GetOwner(), AttributeSetClass));
+		}
+		else
+		{
+			UE_LOG(LogAttributeSetHolder, Error, TEXT("InitializeWithAbilitySystem called on %s without a valid AttributeSetClass"), *GetName());
+		}
 	}
-
-	m_AbilitySystemComponent->AddAttributeSetSubobject(NewObject<UAttributeSet>(m_AbilitySystemComponent->GetOwner(), m_AttributeSetClass));
 
 	if (IsValid(m_InitialAttributeEffectClass))
 	{
@@ -88,16 +102,6 @@ void UAttributeSetHolder::BeginPlay()
 			InitializeWithAbilitySystem();
 		}
 	}
-}
-
-const UAttributeSet* UAttributeSetHolder::GetAttributeSet() const
-{
-	if (IsValid(m_AbilitySystemComponent))
-	{
-		return m_AbilitySystemComponent->GetAttributeSet(m_AttributeSetClass);
-	}
-
-	return nullptr;
 }
 
 void UAttributeSetHolder::OnAttributeChanged(const FOnAttributeChangeData& AttributeChangeData)

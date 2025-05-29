@@ -2,13 +2,13 @@
 
 #include "PowerCircuitMember.h"
 
-#include "MyGameMode.h"
+#include "ASpaceRepairGameMode.h"
 #include "PowerCircuitComponent.h"
 #include "Net/UnrealNetwork.h"
 
 
 // Add default functionality here for any IPowerCircuitMemberInterface functions that are not pure virtual.
-bool UPowerCircuitMember::AttachToFirstAvailablePowerCircuit(AMyGameMode* const GameMode)
+bool UPowerCircuitMember::AttachToFirstAvailablePowerCircuit(ASpaceRepairGameMode* const GameMode)
 {
 	AActor* Owner = GetOwner();
 	if (IsValid(Owner) && Owner->HasAuthority() && IsValid(GameMode))
@@ -77,14 +77,17 @@ void UPowerCircuitMember::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AActor* Owner = GetOwner();
-
-	if (IsValid(Owner) && Owner->HasAuthority())
+	if (bAutoAttachToPowerCircuit)
 	{
-		AMyGameMode* GameMode = Cast<AMyGameMode>(Owner->GetWorld()->GetAuthGameMode());
-		if (IsValid(GameMode) && !AttachToFirstAvailablePowerCircuit(GameMode))
+		AActor* Owner = GetOwner();
+
+		if (IsValid(Owner) && Owner->HasAuthority())
 		{
-			GameMode->GetOnPowerCircuitAddedDelegate().AddUniqueDynamic(this, &UPowerCircuitMember::AttachToPowerCircuit);
+			ASpaceRepairGameMode* GameMode = Cast<ASpaceRepairGameMode>(Owner->GetWorld()->GetAuthGameMode());
+			if (IsValid(GameMode) && !AttachToFirstAvailablePowerCircuit(GameMode))
+			{
+				GameMode->GetOnPowerCircuitAddedDelegate().AddUniqueDynamic(this, &UPowerCircuitMember::AttachToPowerCircuit);
+			}
 		}
 	}
 }

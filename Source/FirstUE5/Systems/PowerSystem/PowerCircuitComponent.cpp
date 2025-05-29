@@ -5,8 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "PowerConsumerComponent.h"
-#include "FirstUE5/MyGameMode.h"
-#include "Kismet/KismetSystemLibrary.h"
+#include "FirstUE5/ASpaceRepairGameMode.h"
 
 DECLARE_LOG_CATEGORY_CLASS(LogPowerCircuit, Log, All)
 
@@ -42,24 +41,12 @@ void UPowerCircuitComponent::DetachPowerCircuitMember(UPowerCircuitMember* Power
 
 float UPowerCircuitComponent::GetPowerDemand() const
 {
-	const UAttributeSet* AttrSet = GetAttributeSet();
-	if (!IsValid(AttrSet))
-	{
-		return 0.f;
-	}
-
-	return PowerDemandAttribute.GetNumericValue(AttrSet);
+	return GetAttributeValue(PowerDemandAttribute);
 }
 
 float UPowerCircuitComponent::GetPowerCapacity() const
 {
-	const UAttributeSet* AttrSet = GetAttributeSet();
-	if (!IsValid(AttrSet))
-	{
-		return 0.f;
-	}
-
-	return PowerCapacityAttribute.GetNumericValue(AttrSet);
+	return GetAttributeValue(PowerCapacityAttribute);
 }
 
 bool UPowerCircuitComponent::HasAuthority()
@@ -86,7 +73,7 @@ void UPowerCircuitComponent::BeginPlay()
 	if (Owner->HasAuthority())
 	{
 		// register this component with the game mode
-		AMyGameMode* GameMode = Cast<AMyGameMode>(GetWorld()->GetAuthGameMode());
+		ASpaceRepairGameMode* GameMode = Cast<ASpaceRepairGameMode>(GetWorld()->GetAuthGameMode());
 
 		if (IsValid(GameMode))
 		{

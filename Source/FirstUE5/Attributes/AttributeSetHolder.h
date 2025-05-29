@@ -61,6 +61,8 @@ public:
 		return m_AbilitySystemComponent;
 	}
 
+	float GetAttributeValue(const FGameplayAttribute& Attribute) const;
+
 	UFUNCTION(BlueprintCallable)
 	void BindOnAttributeChanged(FGameplayAttribute Attribute);
 
@@ -71,10 +73,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Attributes")
-	TSubclassOf<UAttributeSet> m_AttributeSetClass;
-
-	UFUNCTION(BlueprintPure)
-	const UAttributeSet* GetAttributeSet() const;
+	TArray<TSubclassOf<UAttributeSet>> m_AttributeSetClasses;
 
 	void OnAttributeChanged(const FOnAttributeChangeData& AttributeChangeData);
 

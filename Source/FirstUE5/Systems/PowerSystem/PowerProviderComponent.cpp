@@ -2,8 +2,6 @@
 
 #include "PowerProviderComponent.h"
 
-#include "FirstUE5/MyGameMode.h"
-
 UPowerProviderComponent::UPowerProviderComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -12,11 +10,5 @@ UPowerProviderComponent::UPowerProviderComponent()
 
 float UPowerProviderComponent::GetPowerCapacity() const
 {
-	const UAttributeSet* AttrSet = GetAttributeSet();
-	if (!IsValid(AttrSet))
-	{
-		return 0.f;
-	}
-
-	return PowerCapacityAttribute.GetNumericValue(AttrSet);
+	return GetAttributeValue(PowerCapacityAttribute);
 }

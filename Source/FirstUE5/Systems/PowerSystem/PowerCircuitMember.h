@@ -7,7 +7,7 @@
 #include "UObject/Interface.h"
 #include "PowerCircuitMember.generated.h"
 
-class AMyGameMode;
+class ASpaceRepairGameMode;
 class UPowerCircuitComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPowerCircuitChangedDelegate, UPowerCircuitComponent*, PowerCircuit);
@@ -19,7 +19,7 @@ class FIRSTUE5_API UPowerCircuitMember : public UAttributeSetHolder
 
 public:
 	UFUNCTION(BlueprintCallable)
-	bool AttachToFirstAvailablePowerCircuit(AMyGameMode* const GameMode);
+	bool AttachToFirstAvailablePowerCircuit(ASpaceRepairGameMode* const GameMode);
 
 	UFUNCTION(BlueprintCallable)
 	void AttachToPowerCircuit(UPowerCircuitComponent* PowerCircuit);
@@ -55,4 +55,7 @@ private:
 protected:
 	UPROPERTY(Transient, Replicated);
 	bool bEnabled = false;
+
+	UPROPERTY(EditAnywhere, Category = "PowerCircuit")
+	bool bAutoAttachToPowerCircuit = false;
 };

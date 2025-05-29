@@ -8,7 +8,7 @@
 #include "Components/ActorComponent.h"
 #include "PowerProviderComponent.generated.h"
 
-class AMyGameMode;
+class ASpaceRepairGameMode;
 class UPowerCircuitComponent;
 class UAbilitySystemComponent;
 class UPowerCircuitMemberAttributeSet;

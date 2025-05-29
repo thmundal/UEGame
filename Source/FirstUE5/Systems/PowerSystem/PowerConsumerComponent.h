@@ -7,7 +7,7 @@
 #include "PowerCircuitMember.h"
 #include "PowerConsumerComponent.generated.h"
 
-class AMyGameMode;
+class ASpaceRepairGameMode;
 class UPowerCircuitComponent;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

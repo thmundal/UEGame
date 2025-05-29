@@ -2,10 +2,7 @@
 
 
 #include "PowerConsumerComponent.h"
-
-#include "AbilitySystemComponent.h"
 #include "PowerCircuitComponent.h"
-#include "FirstUE5/MyGameMode.h"
 
 UPowerConsumerComponent::UPowerConsumerComponent()
 {
@@ -15,13 +12,7 @@ UPowerConsumerComponent::UPowerConsumerComponent()
 
 float UPowerConsumerComponent::GetPowerDemand() const
 {
-	const UAttributeSet* AttrSet = GetAttributeSet();
-	if (!IsValid(AttrSet))
-	{
-		return 0.f;
-	}
-
-	return PowerDemandAttribute.GetNumericValue(AttrSet);
+	return GetAttributeValue(PowerDemandAttribute);
 }
 
 bool UPowerConsumerComponent::IsPowered() const
